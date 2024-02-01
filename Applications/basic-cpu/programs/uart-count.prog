@@ -1,23 +1,49 @@
+; Init ASCII offset register A
 CLR AC
 ADD 30h
 STA A
 CLR AC
-STA B           ; B holds the current counter
 JMPZ 10
 
-.org 100
+; Init counter register B
+.org 10
+CLR AC
+STA B
+JMPZ 20
+
+; Count
+.org 20
 ADD B           ; reload current counter
 ADD 1           ; inc AC by 1
-STA B           ; store counter in B
+STA B           ; store counter + 1 in B
 STA LED
+
+; Wait
 WAIT 250
 WAIT 250
 WAIT 250
 WAIT 250        ; wait 1 second
-CLR AC          ; clear AC so we jump in the next line
+
+; Print Counter
+CLR AC
 ADD A
 ADD B
 STA C
 PRNT C
+
+; If counter = 9, restart
 CLR AC
-JMPZ 100
+ADD B
+ADD F7h
+JMPZ 50
+
+CLR AC         ; Continue counting
+JMPZ 20        ; clear AC so we jump in the next line
+
+; Line Feed, Carriage Return
+.org 50
+WAIT 1
+PRNT 0Ah
+WAIT 1
+PRNT 0Dh
+jmpz 10
