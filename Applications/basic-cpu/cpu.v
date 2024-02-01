@@ -9,6 +9,7 @@ module cpu(
     output reg [7:0] cpuChar = 0,
     output reg [5:0] cpuCharIndex = 0,
     output reg writeScreen = 0,
+    output reg writeUart = 0,
     input reset,
     input btn
 );

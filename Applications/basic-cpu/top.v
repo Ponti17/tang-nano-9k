@@ -17,6 +17,7 @@ module top
     output flashCs,
     input btn1,
     input btn2,
+    output uart_tx,
     output [5:0] led
 );
     reg btn1Reg = 1, btn2Reg = 1;
@@ -24,6 +25,11 @@ module top
         btn1Reg <= btn1 ? 0 : 1;
         btn2Reg <= btn2 ? 0 : 1;
     end
+
+    uart u(
+        clk,
+        uart_tx
+    );
 
     wire [9:0] pixelAddress;
     wire [7:0] textPixelData;
@@ -69,6 +75,7 @@ module top
     wire [7:0] cpuChar;
     wire [5:0] cpuCharIndex;
     wire writeScreen;
+    wire writeUart;
 
     cpu c(
         clk,
@@ -80,6 +87,7 @@ module top
         cpuChar,
         cpuCharIndex,
         writeScreen,
+        writeUart,
         btn1Reg,
         btn2Reg
     );

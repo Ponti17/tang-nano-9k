@@ -5,7 +5,8 @@
         "screen.v",
         "text.v",
         "top.v",
-        "cpu.v"
+        "cpu.v",
+        "uart.v"
     ],
     "constraintsFile": "tangnano9k.cst",
     "synthGowinOptions": ["-noalu", "-nowidelut", "-nolutram", "-nodffe"],
