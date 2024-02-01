@@ -7,7 +7,8 @@ module uart
 (
     input clk,
     output uart_tx,
-    input writeUart
+    input writeUart,
+    input [7:0] charOut
 );
 
 localparam HALF_DELAY_WAIT = (DELAY_FRAMES / 2);
@@ -21,7 +22,7 @@ reg [3:0] txByteCounter = 0;
 
 assign uart_tx = txPinRegister;
 
-localparam MEMORY_LENGTH = 12;
+localparam MEMORY_LENGTH = 1;
 reg [7:0] testMemory [MEMORY_LENGTH-1:0];
 
 initial begin
@@ -61,7 +62,7 @@ always @(posedge clk) begin
             txPinRegister <= 0;
             if ((txCounter + 1) == DELAY_FRAMES) begin
                 txState <= TX_STATE_WRITE;
-                dataOut <= testMemory[txByteCounter];
+                dataOut <= charOut;
                 txBitNumber <= 0;
                 txCounter <= 0;
             end else 
@@ -95,7 +96,7 @@ always @(posedge clk) begin
         end
         TX_STATE_DEBOUNCE: begin
             if (txCounter == 23'b111111111111111111) begin
-                if (writeUart == 1) 
+                if (~writeUart) 
                     txState <= TX_STATE_IDLE;
             end else
                 txCounter <= txCounter + 1;

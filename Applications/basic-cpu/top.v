@@ -32,7 +32,8 @@ module top
     uart #(DELAY_FRAMES) u(
         clk,
         uart_tx,
-        writeUart
+        writeUart,
+        cpuChar
     );
 
     wire [9:0] pixelAddress;

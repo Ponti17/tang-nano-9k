@@ -163,6 +163,7 @@ module cpu(
                 end
                 STATE_PRINT: begin
                     writeScreen <= 0;
+                    writeUart <= 0;
                     state <= STATE_FETCH;
                 end
                 STATE_WAIT: begin
