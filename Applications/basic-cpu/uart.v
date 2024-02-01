@@ -7,6 +7,7 @@ module uart
 (
     input clk,
     output uart_tx,
+    input writeUart
 );
 
 localparam HALF_DELAY_WAIT = (DELAY_FRAMES / 2);
@@ -24,17 +25,17 @@ localparam MEMORY_LENGTH = 12;
 reg [7:0] testMemory [MEMORY_LENGTH-1:0];
 
 initial begin
-    testMemory[0] = "L";
-    testMemory[1] = "u";
-    testMemory[2] = "s";
-    testMemory[3] = "h";
-    testMemory[4] = "a";
-    testMemory[5] = "y";
-    testMemory[6] = " ";
-    testMemory[7] = "L";
-    testMemory[8] = "a";
-    testMemory[9] = "b";
-    testMemory[10] = "s";
+    testMemory[0] = "H";
+    testMemory[1] = "e";
+    testMemory[2] = "l";
+    testMemory[3] = "l";
+    testMemory[4] = "o";
+    testMemory[5] = " ";
+    testMemory[6] = "W";
+    testMemory[7] = "o";
+    testMemory[8] = "r";
+    testMemory[9] = "l";
+    testMemory[10] = "d";
     testMemory[11] = " ";
 end
 
@@ -47,7 +48,7 @@ localparam TX_STATE_DEBOUNCE = 4;
 always @(posedge clk) begin
     case (txState)
         TX_STATE_IDLE: begin
-            if (btn1 == 0) begin
+            if (writeUart) begin
                 txState <= TX_STATE_START_BIT;
                 txCounter <= 0;
                 txByteCounter <= 0;
@@ -83,7 +84,7 @@ always @(posedge clk) begin
             txPinRegister <= 1;
             if ((txCounter + 1) == DELAY_FRAMES) begin
                 if (txByteCounter == MEMORY_LENGTH - 1) begin
-                    txState <= TX_STATE_DEBOUNCE;
+                    txState <= TX_STATE_IDLE;
                 end else begin
                     txByteCounter <= txByteCounter + 1;
                     txState <= TX_STATE_START_BIT;
@@ -94,7 +95,7 @@ always @(posedge clk) begin
         end
         TX_STATE_DEBOUNCE: begin
             if (txCounter == 23'b111111111111111111) begin
-                if (btn1 == 1) 
+                if (writeUart == 1) 
                     txState <= TX_STATE_IDLE;
             end else
                 txCounter <= txCounter + 1;

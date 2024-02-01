@@ -2,7 +2,8 @@
 
 module top
 #(
-  parameter STARTUP_WAIT = 32'd10000000
+  parameter STARTUP_WAIT = 32'd10000000,
+  parameter DELAY_FRAMES = 234 // 27,000,000 (27Mhz) / 115200 Baud rate
 )
 (
     input clk,
@@ -17,8 +18,8 @@ module top
     output flashCs,
     input btn1,
     input btn2,
-    output uart_tx,
-    output [5:0] led
+    output [5:0] led,
+    output uart_tx
 );
     reg btn1Reg = 1, btn2Reg = 1;
     always @(negedge clk) begin
@@ -26,9 +27,12 @@ module top
         btn2Reg <= btn2 ? 0 : 1;
     end
 
-    uart u(
+    wire writeUart;
+
+    uart #(DELAY_FRAMES) u(
         clk,
-        uart_tx
+        uart_tx,
+        writeUart
     );
 
     wire [9:0] pixelAddress;
@@ -75,7 +79,6 @@ module top
     wire [7:0] cpuChar;
     wire [5:0] cpuCharIndex;
     wire writeScreen;
-    wire writeUart;
 
     cpu c(
         clk,

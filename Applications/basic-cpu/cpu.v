@@ -143,6 +143,7 @@ module cpu(
                                 a <= ~a;
                         end
                         CMD_PRNT: begin
+                            writeUart <= 1;
                             cpuCharIndex <= ac[5:0];
                             cpuChar <= param;
                             writeScreen <= 1;

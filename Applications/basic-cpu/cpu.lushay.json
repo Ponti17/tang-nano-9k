@@ -11,9 +11,7 @@
     "constraintsFile": "tangnano9k.cst",
     "synthGowinOptions": ["-noalu", "-nowidelut", "-nolutram", "-nodffe"],
     "externalFlashFiles": [
-        "programs/counter.bin", 
-        "programs/screen.bin",
-        "programs/btn_counter.bin"
+        "programs/counter.bin"
     ],
     "nextPnrGowinOptions": ["--enable-globals"]
 }
